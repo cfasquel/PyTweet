@@ -7,5 +7,6 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'PyTweet.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
+    url(r'^$', 'PyTweetApp.views.home'),
     url(r'^admin/', include(admin.site.urls)),
 )
