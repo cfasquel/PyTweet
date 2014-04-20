@@ -16,3 +16,7 @@ def home(request):
 def hashtag(request):
 
 	return render(request, 'hashtag.html', locals())
+
+def signup(request):
+
+	return render(request, 'sign-up.html', locals())
