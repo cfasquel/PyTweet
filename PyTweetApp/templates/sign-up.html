@@ -1,0 +1,39 @@
+{% extends '_base.html' %}
+
+{% block body %}
+
+<div class="page-header">
+	<h1>Rejoignez PyTweet aujourd'hui !</h1>
+</div>
+
+<div class="col-md-6 col-md-offset-3">
+	<div class="well">
+		<form role="form">
+			<fieldset>
+				<legend>Créer un compte</legend>
+				<div class="form-group">
+			    	<label for="in-name">Nom complet</label>
+					<input type="text" class="form-control" id="in-name" placeholder="Entrez vos nom et prénom">
+			  	</div>
+				<div class="form-group">
+			    	<label for="in-email">Adresse mail</label>
+					<input type="email" class="form-control" id="in-email" placeholder="Entrez votre adresse e-mail">
+			  	</div>
+			  	<div class="form-group">
+					<label for="in-password">Créer un mot de passe</label>
+					<input type="password" class="form-control" id="in-password" placeholder="Password">
+				</div>
+				<label for="in-tag">Choisissez votre nom d'utilisateur</label>
+				<div class="input-group">
+					<span class="input-group-addon">@</span>
+					<input type="text" class="form-control" id="in-tag" placeholder="Entrez un nom d'utilisateur unique">
+				</div>
+				<br/>
+			  	<button type="submit" class="btn btn-warning">Créer un compte</button>
+			</fieldset>
+		</form>
+	</div>
+</div>
+
+{% endblock %}
+
