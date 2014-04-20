@@ -5,4 +5,10 @@ from django.http import HttpResponse
 
 # Create your views here.
 def home(request):
-  	return render(request, 'home.html', locals())
+
+	isConnected = True
+
+	if isConnected :
+		return render(request, 'tweet-line.html', locals())
+  	else :
+  		return render(request, 'home.html', locals())
