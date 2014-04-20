@@ -2,9 +2,55 @@
 
 {% block body %}
 
+<h1>Bienvenue sur PyTweet !</h1>
+
 <div class="col-md-6">
-		<h1>Bienvenue sur PyTweet !</h1>
-		<p class="lead">Ceci est la première page de l'application.</p>
+	<div class="well">
+		<form role="form">
+			<fieldset>
+				<legend>Se connecter</legend>
+				<div class="form-group">
+					<label for="co-email">Adresse mail</label>
+					<input type="email" class="form-control" id="co-email" placeholder="Entrez votre adresse e-mail">
+				</div>
+				<div class="form-group">
+					<label for="co-password">Mot de passe</label>
+					<input type="password" class="form-control" id="co-password" placeholder="Password">
+				</div>
+
+				<button type="submit" class="btn btn-primary">Se connecter</button>
+			</fieldset>
+		</form>
+	</div>
+</div>
+
+<div class="col-md-6">
+	<div class="well">
+		<form role="form">
+			<fieldset>
+				<legend>Créer un compte</legend>
+				<div class="form-group">
+			    	<label for="in-name">Nom complet</label>
+					<input type="text" class="form-control" id="in-name" placeholder="Entrez vos nom et prénom">
+			  	</div>
+				<div class="form-group">
+			    	<label for="in-email">Adresse mail</label>
+					<input type="email" class="form-control" id="in-email" placeholder="Entrez votre adresse e-mail">
+			  	</div>
+			  	<div class="form-group">
+					<label for="in-password">Créer un mot de passe</label>
+					<input type="password" class="form-control" id="in-password" placeholder="Password">
+				</div>
+				<label for="in-tag">Choisissez votre nom d'utilisateur</label>
+				<div class="input-group">
+					<span class="input-group-addon">@</span>
+					<input type="text" class="form-control" id="in-tag" placeholder="Entrez un nom d'utilisateur unique">
+				</div>
+				<br/>
+			  	<button type="submit" class="btn btn-warning">Créer un compte</button>
+			</fieldset>
+		</form>
+	</div>
 </div>
 
 {% endblock %}
