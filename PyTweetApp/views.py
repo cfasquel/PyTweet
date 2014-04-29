@@ -1,10 +1,13 @@
 #-*- coding: utf-8 -*-
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
+from django.contrib import auth
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+
+from django.core.urlresolvers import reverse
 
 from PyTweetApp.forms import SignInForm, SignUpForm
 
@@ -50,9 +53,13 @@ def signup(request):
             user = authenticate(username=username, password=password)
 
             login(request, user)  # nous connectons l'utilisateur
-            
+
             return render(request, 'tweet-line.html', locals())
     else:
         form = SignUpForm()
 
     return render(request, 'sign-up.html', locals())
+
+def logout(request):
+    auth.logout(request)
+    return redirect(home)
