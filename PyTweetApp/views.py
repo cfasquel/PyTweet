@@ -15,19 +15,26 @@ from PyTweetApp.forms import SignInForm, SignUpForm
 
 def home(request):
 
-    if request.method == "POST":
+    if request.method == "POST" :
+
         form = SignInForm(request.POST)
-        if form.is_valid():
+
+        if form.is_valid() :
             username = form.cleaned_data["username"]  # Nous récupérons le nom d'utilisateur
             password = form.cleaned_data["password"]  # … et le mot de passe
             user = authenticate(username=username, password=password)  #Nous vérifions si les données sont correctes
-            if user:  # Si l'objet renvoyé n'est pas None
+            
+            if user :  # Si l'objet renvoyé n'est pas None
                 login(request, user)  # nous connectons l'utilisateur
                 return render(request, 'tweet-line.html', locals())
-            else: #sinon une erreur sera affichée
+            else : #sinon une erreur sera affichée
                 error = True
-    else:
-        form = SignInForm()
+    
+    else :
+        if request.user.is_authenticated() :
+            return render(request, 'tweet-line.html', locals())
+        else :
+            form = SignInForm()
 
     return render(request, 'home.html',locals())
 
@@ -36,8 +43,10 @@ def hashtag(request):
 	return render(request, 'hashtag.html', locals())
 
 def signup(request):
+    
     if request.method == "POST":
         form = SignUpForm(request.POST)
+        
         if form.is_valid():
             firstname = form.cleaned_data["firstname"]
             lastname = form.cleaned_data["lastname"]
@@ -55,11 +64,14 @@ def signup(request):
             login(request, user)  # nous connectons l'utilisateur
 
             return render(request, 'tweet-line.html', locals())
+
     else:
+    
         form = SignUpForm()
 
     return render(request, 'sign-up.html', locals())
 
 def logout(request):
+    
     auth.logout(request)
     return redirect(home)
