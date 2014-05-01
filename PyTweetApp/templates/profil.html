@@ -1,0 +1,54 @@
+{% extends '_base.html' %}
+
+{% load staticfiles %}
+
+{% block body %}
+
+<div class="page-header">
+	<h1>Tweet Line de {{ user_profil.first_name }} {{ user_profil.last_name }}</h1>
+</div>
+
+<div class="col-md-3">
+	<div class="well">
+		<div class="row">
+			<div class="col-md-5">
+		      	<img class="img-rounded" src="{% static 'avatar/0.png' %}" alt="avatar">
+		  	</div>
+		  	<div class="col-md-7">
+		    	<h4>{{ user_profil.first_name }} {{ user_profil.last_name }}</h4>
+		    	<a href="#">@{{ user_profil.username }}</a>
+		  	</div>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-9">
+	<div class="list-group">
+		<a href="#" class="list-group-item active">
+			Tweets
+		</a>
+		{% for tweet in tweets %}
+		<div class="list-group-item">
+			<div class="row">
+				<div class="col-md-2">
+					<img class="img-rounded" src="{% static 'avatar/0.png' %}" alt="avatar">
+				</div>
+				<div class="col-md-10">
+					<a href="#"><strong>@{{ tweet.author.username }}</strong></a>
+					<p>{{ tweet.text }}</p>
+				</div>
+			</div>
+	    </div>
+	    {% empty %}
+	    <div class="list-group-item">
+			<div class="row">
+				<div class="col-md-10">
+					<p>Aucun tweets trouvés</p>
+				</div>
+			</div>
+	    </div>
+		{% endfor %}
+	</div>
+</div>
+
+{% endblock %}

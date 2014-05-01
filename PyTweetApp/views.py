@@ -9,8 +9,9 @@ from django.contrib.auth.models import User
 
 from django.core.urlresolvers import reverse
 
-from PyTweetApp.forms import SignInForm, SignUpForm
+from PyTweetApp.forms import SignInForm, SignUpForm, NewTweetForm
 
+from PyTweetApp.models import Tweet
 # Create your views here.
 
 def home(request):
@@ -26,17 +27,41 @@ def home(request):
             
             if user :  # Si l'objet renvoyé n'est pas None
                 login(request, user)  # nous connectons l'utilisateur
-                return render(request, 'tweet-line.html', locals())
+                return redirect(tweetline)
             else : #sinon une erreur sera affichée
                 error = True
     
     else :
         if request.user.is_authenticated() :
-            return render(request, 'tweet-line.html', locals())
+        	return redirect(tweetline)
         else :
             form = SignInForm()
 
     return render(request, 'home.html',locals())
+
+def tweetline(request):
+	
+	if request.method == "POST" :
+
+		form = NewTweetForm(request.POST)
+
+		if form.is_valid() :
+			tweet_message = form.cleaned_data["tweet_message"]
+			tweet = Tweet(text=tweet_message, author=request.user)
+			tweet.save()
+		else :
+			error = True
+	else :
+		form = NewTweetForm()
+	return render(request, 'tweet-line.html', locals())
+
+def profil(request, username):
+    
+    user_profil = User.objects.get(username=username)
+
+    tweets = Tweet.objects.filter(author=user_profil)
+
+    return render(request, 'profil.html', locals())
 
 def hashtag(request):
 
@@ -63,7 +88,7 @@ def signup(request):
 
             login(request, user)  # nous connectons l'utilisateur
 
-            return render(request, 'tweet-line.html', locals())
+            return redirect(tweetline)
 
     else:
     

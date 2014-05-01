@@ -7,7 +7,7 @@
 </div>
 
 <div class="well">
-	<form method="post" action=".">
+	<form method="post" action="{% url "PyTweetApp.views.signup" %}">
 		{% csrf_token %}
 		{{ form.as_p }}
 		<input type="submit"/>

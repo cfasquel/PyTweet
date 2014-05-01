@@ -12,3 +12,7 @@ class SignUpForm(forms.Form):
     email = forms.EmailField(label="E-mail", max_length=50)
     password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
     username = forms.CharField(label="Nom d'utilisateur", max_length=30)
+
+class NewTweetForm(forms.Form):
+
+    tweet_message = forms.CharField(label="Votre tweet", max_length=140, widget=forms.Textarea)

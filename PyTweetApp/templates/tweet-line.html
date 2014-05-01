@@ -15,8 +15,9 @@
 		      	<img class="img-rounded" src="{% static 'avatar/0.png' %}" alt="avatar">
 		  	</div>
 		  	<div class="col-md-7">
-		    	<h4>John Doe</h4>
-		    	<a href="#">@JohnDoe</a>
+		    	<h4>{{ request.user.first_name }} {{ request.user.last_name }}</h4>
+		    	<a href="#">@{{ request.user.username }}</a><br/><br/>
+		    	<button data-toggle="modal" data-target="#new-tweet" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-send"></span> Écrire un tweet</button>
 		  	</div>
 		</div>
 	</div>
@@ -73,5 +74,26 @@
 	    </div>
 	</div>
 </div>
+{% endblock %}
 
+{% block modal %}
+<div class="modal fade" id="new-tweet" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form method="post" action="{% url "PyTweetApp.views.tweetline" %}">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-send"></span> Écrire un tweet</h4>
+				</div>
+				<div class="modal-body">
+					{% csrf_token %}
+					{{ form.as_p }}
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Tweeter</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
 {% endblock %}
