@@ -7,6 +7,8 @@ from django.contrib import auth
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
+from django.db.models import Q
+
 from django.core.urlresolvers import reverse
 
 from PyTweetApp.forms import SignInForm, SignUpForm, NewTweetForm
@@ -44,10 +46,6 @@ def home(request):
 
 def tweetline(request):
 	
-	user_profil = User.objects.get(username=request.user.username)
-
-	tweets = Tweet.objects.filter(author=user_profil).order_by('-date')
-
 	if request.method == "POST" : # L'utilisateur entre un nouveau tweet
 
 		form = NewTweetForm(request.POST)
@@ -82,6 +80,9 @@ def tweetline(request):
 	else :
 
 		form = NewTweetForm()
+
+	user_profil = User.objects.get(username=request.user.username)
+	tweets = Tweet.objects.filter(Q(mentions=user_profil) | Q(author=user_profil)).order_by('-date')
 
 	return render(request, 'tweet-line.html', locals())
 
