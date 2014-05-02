@@ -39,33 +39,68 @@ def home(request):
 
     return render(request, 'home.html',locals())
 
+
+
+
 def tweetline(request):
 	
-	if request.method == "POST" :
+	user_profil = User.objects.get(username=request.user.username)
+
+	tweets = Tweet.objects.filter(author=user_profil).order_by('-date')
+
+	if request.method == "POST" : # L'utilisateur entre un nouveau tweet
 
 		form = NewTweetForm(request.POST)
 
 		if form.is_valid() :
+
 			tweet_message = form.cleaned_data["tweet_message"]
+
 			tweet = Tweet(text=tweet_message, author=request.user)
+
+			# On récupère le tweet et on découvre les mentions à l'interieur
+
+			tweet_message_splited = tweet_message.split(' ')
+
+			for(tweet_word in tweet_message_splited)
+
+				if tweet_word[0] == '@' # L'utilisateur à mentionné quelqu'un
+				
+					if User.objects.get(username=tweet_word[0:end]) != null
+
+
 			tweet.save()
+
 		else :
+
 			error = True
+
 	else :
+
 		form = NewTweetForm()
+
 	return render(request, 'tweet-line.html', locals())
+
+
+
 
 def profil(request, username):
     
     user_profil = User.objects.get(username=username)
 
-    tweets = Tweet.objects.filter(author=user_profil)
+    tweets = Tweet.objects.filter(author=user_profil).order_by('-date')
 
     return render(request, 'profil.html', locals())
+
+
+
 
 def hashtag(request):
 
 	return render(request, 'hashtag.html', locals())
+
+
+
 
 def signup(request):
     

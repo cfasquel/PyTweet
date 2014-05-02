@@ -5,7 +5,7 @@
 {% block body %}
 
 <div class="page-header">
-	<h1>Tweet Line</h1>
+	<h1>Fil d'actualités</h1>
 </div>
 
 <div class="col-md-3">
@@ -16,7 +16,7 @@
 		  	</div>
 		  	<div class="col-md-7">
 		    	<h4>{{ request.user.first_name }} {{ request.user.last_name }}</h4>
-		    	<a href="#">@{{ request.user.username }}</a><br/><br/>
+		    	<a href="{% url "PyTweetApp.views.profil" user.username %}">@{{ request.user.username }}</a><br/><br/>
 		    	<button data-toggle="modal" data-target="#new-tweet" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-send"></span> Écrire un tweet</button>
 		  	</div>
 		</div>
@@ -28,50 +28,27 @@
 		<a href="#" class="list-group-item active">
 			Tweets
 		</a>
+		{% for tweet in tweets %}
 		<div class="list-group-item">
 			<div class="row">
 				<div class="col-md-2">
 					<img class="img-rounded" src="{% static 'avatar/0.png' %}" alt="avatar">
 				</div>
 				<div class="col-md-10">
-					<a href="#"><strong>@RandomCitizen1</strong></a>
-					<p>Je n'ai toujours rien à dire.</p>
+					<a href="{% url "PyTweetApp.views.profil" tweet.author.username %}"><strong>@{{ tweet.author.username }}</strong></a> - <em>{{ tweet.date }}</em>
+					<p>{{ tweet.text }}</p>
 				</div>
 			</div>
 	    </div>
+	    {% empty %}
 	    <div class="list-group-item">
 			<div class="row">
-				<div class="col-md-2">
-					<img class="img-rounded" src="{% static 'avatar/0.png' %}" alt="avatar">
-				</div>
 				<div class="col-md-10">
-					<a href="#"><strong>@RandomCitizen3</strong></a>
-					<p>Bonjour <a href="#">@JohnDoe</a> ! Je me suis inscris sur PyTweet aussi !</p>
+					<p>Aucun tweets trouvés</p>
 				</div>
 			</div>
 	    </div>
-	    <div class="list-group-item">
-			<div class="row">
-				<div class="col-md-2">
-					<img class="img-rounded" src="{% static 'avatar/0.png' %}" alt="avatar">
-				</div>
-				<div class="col-md-10">
-					<a href="#"><strong>@RandomCitizen2</strong></a>
-					<p>Quelqu'un sait quand l'application sortira de sa version Béta ? <a href="#">#PyTweet</a></p>
-				</div>
-			</div>
-	    </div>
-	    <div class="list-group-item">
-			<div class="row">
-				<div class="col-md-2">
-					<img class="img-rounded" src="{% static 'avatar/0.png' %}" alt="avatar">
-				</div>
-				<div class="col-md-10">
-					<a href="#"><strong>@RandomCitizen1</strong></a>
-					<p>Je n'ai pas grand chose à dire. Mais je le dis. Voilà.</p>
-				</div>
-			</div>
-	    </div>
+		{% endfor %}
 	</div>
 </div>
 {% endblock %}

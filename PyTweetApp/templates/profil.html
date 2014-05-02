@@ -16,7 +16,7 @@
 		  	</div>
 		  	<div class="col-md-7">
 		    	<h4>{{ user_profil.first_name }} {{ user_profil.last_name }}</h4>
-		    	<a href="#">@{{ user_profil.username }}</a>
+		    	<a href="{% url "PyTweetApp.views.profil" user.username %}">@{{ user_profil.username }}</a>
 		  	</div>
 		</div>
 	</div>
@@ -34,7 +34,7 @@
 					<img class="img-rounded" src="{% static 'avatar/0.png' %}" alt="avatar">
 				</div>
 				<div class="col-md-10">
-					<a href="#"><strong>@{{ tweet.author.username }}</strong></a>
+					<a href="{% url "PyTweetApp.views.profil" tweet.author.username %}"><strong>@{{ tweet.author.username }}</strong></a> - <em>{{ tweet.date }}</em>
 					<p>{{ tweet.text }}</p>
 				</div>
 			</div>
