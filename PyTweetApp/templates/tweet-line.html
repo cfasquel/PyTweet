@@ -37,6 +37,13 @@
 				<div class="col-md-10">
 					<a href="{% url "PyTweetApp.views.profil" tweet.author.username %}"><strong>@{{ tweet.author.username }}</strong></a> - <em>{{ tweet.date }}</em>
 					<p>{{ tweet.text }}</p>
+					{% if tweet.author.username != request.user.username %}
+						<div class="btn-group">
+							<button type="button" class="btn btn-default" onclick="replyTweet('{{ tweet.author.username }}');"><span class="glyphicon glyphicon-share"></span> Répondre</button>
+							<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span> Retweeter</button>
+							<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> Suivre @{{ tweet.author.username }}</button>
+						</div>
+					{% endif %}
 				</div>
 			</div>
 	    </div>
@@ -54,13 +61,13 @@
 {% endblock %}
 
 {% block modal %}
-<div class="modal fade" id="new-tweet" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="new-tweet" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<form method="post" action="{% url "PyTweetApp.views.tweetline" %}">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-send"></span> Écrire un tweet</h4>
+					<h4 class="modal-title" id="modal-label"><span class="glyphicon glyphicon-send"></span> Écrire un tweet</h4>
 				</div>
 				<div class="modal-body">
 					{% csrf_token %}
@@ -73,4 +80,8 @@
 		</form>
 	</div>
 </div>
+{% endblock %}
+
+{% block javascript %}
+	<script src="{% static 'javascript/tweet-line.js' %}"></script>
 {% endblock %}

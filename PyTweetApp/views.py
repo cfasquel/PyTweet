@@ -69,9 +69,10 @@ def tweetline(request):
 						mentionned_user = User.objects.get(username=tweet_word[1:])
 						tweet.mentions.add(mentionned_user)
 					except User.DoesNotExist :
-						continue				
+						continue
 
 			tweet.save()
+			form = NewTweetForm()
 
 		else :
 

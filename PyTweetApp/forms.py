@@ -15,4 +15,4 @@ class SignUpForm(forms.Form):
 
 class NewTweetForm(forms.Form):
 
-	tweet_message = forms.CharField(label="Votre tweet", max_length=140, widget=forms.Textarea)
+	tweet_message = forms.CharField(label="Votre tweet", max_length=140, widget=forms.Textarea(attrs={'maxlength':140}))

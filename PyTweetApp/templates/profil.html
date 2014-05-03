@@ -16,7 +16,10 @@
 		  	</div>
 		  	<div class="col-md-7">
 		    	<h4>{{ user_profil.first_name }} {{ user_profil.last_name }}</h4>
-		    	<a href="{% url "PyTweetApp.views.profil" user.username %}">@{{ user_profil.username }}</a>
+		    	<a href="{% url "PyTweetApp.views.profil" user.username %}">@{{ user_profil.username }}</a><br/><br/>
+		    	{% if user_profil.username != request.user.username %}
+		    	<button type="button" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-user"></span> S'abonner</button>
+		    	{% endif %}
 		  	</div>
 		</div>
 	</div>
