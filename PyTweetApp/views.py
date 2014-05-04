@@ -23,14 +23,14 @@ def home(request):
 		form = SignInForm(request.POST)
 
 		if form.is_valid() :
-			username = form.cleaned_data["username"]  # Nous récupérons le nom d'utilisateur
-			password = form.cleaned_data["password"]  # … et le mot de passe
-			user = authenticate(username=username, password=password)  #Nous vérifions si les données sont correctes
+			username = form.cleaned_data["username"]  # retreiving user name
+			password = form.cleaned_data["password"]  # ...and password
+			user = authenticate(username=username, password=password)
 
-			if user :  # Si l'objet renvoyé n'est pas None
-				login(request, user)  # nous connectons l'utilisateur
-				return redirect(tweetline)
-			else : #sinon une erreur sera affichée
+			if user :  # if authentication worked
+				login(request, user)  # user connection
+				return redirect(tweetline) # redirecting to tweet-line
+			else :
 				error = True
 
 	else :
@@ -46,7 +46,7 @@ def home(request):
 
 def tweetline(request):
 	
-	if request.method == "POST" : # L'utilisateur entre un nouveau tweet
+	if request.method == "POST" : # User is sending a new tweet
 
 		form = NewTweetForm(request.POST)
 
@@ -58,19 +58,19 @@ def tweetline(request):
 
 			tweet.save()
 
-			# On récupère le tweet et on découvre les mentions à l'interieur
+			# checking if there is mentions or hashtags
 
 			tweet_message_splited = tweet_message.split(' ')
 
 			for tweet_word in tweet_message_splited :
 
-				if tweet_word[0] == '@' :# L'utilisateur à mentionné quelqu'un
+				if tweet_word[0] == '@' : # There is a mention
 					try :
 						mentionned_user = User.objects.get(username=tweet_word[1:])
 						tweet.mentions.add(mentionned_user)
 					except User.DoesNotExist :
 						continue
-				elif tweet_word[0] == '#' :
+				elif tweet_word[0] == '#' : # There is a hashtag
 						hashtag = Hashtag.objects.get_or_create(name=tweet_word[1:])
 						tweet.hashtags.add(hashtag[0])
 
@@ -87,9 +87,10 @@ def tweetline(request):
 
 	user_profil = User.objects.get(username=request.user.username)
 
-	tweets = Tweet.objects.filter(Q(mentions=request.user) | # si l'utilisateur est mentionné dans le tweet
-								  Q(author=user_profil) | # si l'utilisateur est l'auteur du tweet
-								  Q(author__in=request.user.member.followed.all())).order_by('-date') # si l'auteur est suivi par l'utilisateur
+	tweets = Tweet.objects.filter(Q(mentions=request.user) | # if user is mentionned
+								  Q(author=user_profil) | # if user is the author
+								  #Q(id__in=request.user.retweets.all()) # if this is a retweet (didn't managed to make it work, targetting id)
+								  Q(author__in=request.user.member.followed.all())).order_by('-date') # if user is followed by logged in user
 
 	return render(request, 'tweet-line.html', locals())
 
@@ -191,7 +192,7 @@ def signup(request):
 
 			newUser = authenticate(username=username, password=password)
 
-			login(request, newUser)  # nous connectons l'utilisateur
+			login(request, newUser)  # user connection on sign up
 
 			return redirect(tweetline)
 
