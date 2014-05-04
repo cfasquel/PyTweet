@@ -36,6 +36,23 @@
 				<div class="col-md-10">
 					<a href="{% url "PyTweetApp.views.profil" tweet.author.username %}"><strong>@{{ tweet.author.username }}</strong></a> - <em>{{ tweet.date }}</em>
 					<p>{{ tweet.text }}</p>
+
+					{% if tweet.author != request.user %}
+						<div class="btn-group">
+							
+							{% if tweet not in request.user.member.retweets.all %}
+							<a class="btn btn-default" href="{% url "PyTweetApp.views.retweet" tweet.id %}"><span class="glyphicon glyphicon-refresh"></span> Retweeter</a>
+							{% endif %}
+
+							{% if tweet.author in request.user.member.followed.all %}
+								<a class="btn btn-warning" href="{% url "PyTweetApp.views.unfollow" tweet.author.username %}"><span class="glyphicon glyphicon-user"></span> Se désabonner de @{{ tweet.author.username }}</a>
+							{% else %}
+								<a class="btn btn-primary" href="{% url "PyTweetApp.views.follow" tweet.author.username %}"><span class="glyphicon glyphicon-user"></span> Suivre @{{ tweet.author.username }}</a>
+							{% endif %}
+
+						</div>
+					{% endif %}
+
 				</div>
 			</div>
 	    </div>
