@@ -10,7 +10,7 @@
 	<form method="post" action="{% url "PyTweetApp.views.signup" %}">
 		{% csrf_token %}
 		{{ form.as_p }}
-		<input type="submit"/>
+		<button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-eject"></span> S'inscrire</button>
 	</form>
 </div>
 

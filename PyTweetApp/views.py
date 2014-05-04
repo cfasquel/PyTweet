@@ -90,7 +90,7 @@ def tweetline(request):
 	tweets = Tweet.objects.filter(Q(mentions=request.user) | # if user is mentionned
 								  Q(author=user_profil) | # if user is the author
 								  #Q(id__in=request.user.retweets.all()) # if this is a retweet (didn't managed to make it work, targetting id)
-								  Q(author__in=request.user.member.followed.all())).order_by('-date') # if user is followed by logged in user
+								  Q(author__in=request.user.member.followed.all())).order_by('-date').distinct() # if user is followed by logged in user
 
 	return render(request, 'tweet-line.html', locals())
 
