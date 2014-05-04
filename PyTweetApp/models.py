@@ -1,9 +1,10 @@
 #-*- coding: utf-8 -*-
+
 from django.db import models
 from django.contrib.auth.models import User
 
 class Hashtag(models.Model):
-	name = models.TextField(max_length=40)
+	name = models.TextField(max_length=100)
 
 	def __unicode__(self):
 		return "Hashtag {0}".format(self.name)
@@ -18,10 +19,10 @@ class Tweet(models.Model):
 	def __unicode__(self):
 		return "Tweet de {0}, {1}".format(self.author.username, self.text)
 
-# class TweetMention(models.Model):
-# 	tweet = models.ForeignKey(Tweet)
-# 	mention = models.ForeignKey(Mention)
+class Member(models.Model):
+    user = models.OneToOneField(User)
+    retweets = models.ManyToManyField(Tweet, null=True, related_name='retweets')
+    followed = models.ManyToManyField(User, null=True, related_name='followed')
 
-# class TweetHashtag(models.Model):
-# 	tweet = models.ForeignKey(Tweet)
-# 	hashtag = models.ForeignKey(Hashtag)
+    def __unicode__(self):
+        return u"Profil de {0}".format(self.user.username)

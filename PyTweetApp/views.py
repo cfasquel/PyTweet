@@ -13,7 +13,7 @@ from django.core.urlresolvers import reverse
 
 from PyTweetApp.forms import SignInForm, SignUpForm, NewTweetForm
 
-from PyTweetApp.models import Tweet, Hashtag
+from PyTweetApp.models import Tweet, Hashtag, Member
 # Create your views here.
 
 def home(request):
@@ -70,6 +70,9 @@ def tweetline(request):
 						tweet.mentions.add(mentionned_user)
 					except User.DoesNotExist :
 						continue
+				elif tweet_word[0] == '#' :
+						hashtag = Hashtag.objects.get_or_create(name=tweet_word[1:])
+						tweet.hashtags.add(hashtag[0])
 
 			tweet.save()
 			form = NewTweetForm()
@@ -83,7 +86,7 @@ def tweetline(request):
 		form = NewTweetForm()
 
 	user_profil = User.objects.get(username=request.user.username)
-	tweets = Tweet.objects.filter(Q(mentions=user_profil) | Q(author=user_profil)).order_by('-date')
+	tweets = Tweet.objects.filter(Q(mentions=user_profil) | Q(author=user_profil) | Q(author__in=request.user.member.followed.all())).order_by('-date')
 
 	return render(request, 'tweet-line.html', locals())
 
@@ -100,13 +103,45 @@ def profil(request, username):
 
 
 
+def hashtaglist(request):
 
-def hashtag(request):
+	hashtags = Hashtag.objects.all()
+
+	return render(request, 'hashtag-list.html', locals())
+
+
+def hashtag(request, hashtag):
+
+	hashtag = Hashtag.objects.get(name=hashtag)
+
+	tweets = Tweet.objects.filter(hashtags=hashtag).order_by('-date')
 
 	return render(request, 'hashtag.html', locals())
 
 
 
+def retweet(request, idtweet):
+	tweet_to_retweet = Tweet.objects.get(id=idtweet)
+	request.user.member.retweets.add(tweet_to_retweet)
+	request.user.member.save()
+
+	return redirect(tweetline)
+
+def follow(request, username):
+
+	user_to_follow = User.objects.get(username=username)
+	request.user.member.followed.add(user_to_follow)
+	request.user.member.save()
+
+	return redirect(tweetline)
+
+def unfollow(request, username):
+
+	user_to_follow = User.objects.get(username=username)
+	request.user.member.followed.remove(user_to_follow)
+	request.user.member.save()
+
+	return redirect(tweetline)
 
 def signup(request):
 
@@ -123,11 +158,13 @@ def signup(request):
 			newUser = User.objects.create_user(username, email, password)
 			newUser.first_name, newUser.last_name = firstname, lastname
 
-			newUser.save()
+			member = Member(user=newUser)
 
-			user = authenticate(username=username, password=password)
+			member.save()
 
-			login(request, user)  # nous connectons l'utilisateur
+			newUser = authenticate(username=username, password=password)
+
+			login(request, newUser)  # nous connectons l'utilisateur
 
 			return redirect(tweetline)
 
