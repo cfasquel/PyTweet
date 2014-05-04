@@ -15,8 +15,8 @@
 		      	<img class="img-rounded" src="{% static 'avatar/0.png' %}" alt="avatar">
 		  	</div>
 		  	<div class="col-md-7">
-		    	<h4>{{ request.user.first_name }} {{ request.user.last_name }}</h4>
-		    	<a href="{% url "PyTweetApp.views.profil" user.username %}">@{{ request.user.username }}</a><br/><br/>
+		    	<h4>{{ user_profil.first_name }} {{ user_profil.last_name }}</h4>
+		    	<a href="{% url "PyTweetApp.views.profil" user.username %}">@{{ user_profil.username }}</a><br/><br/>
 		  	</div>
 		</div>
 	</div>

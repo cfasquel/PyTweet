@@ -20,9 +20,9 @@
 
 		    	<hr/>
 
-				<span class="badge">{{ followers }}</span> <a href="{% url "PyTweetApp.views.followerlist" user.username %}">abonné{{ followers|pluralize }}</a><br/>
+				<span class="badge">{{ followers }}</span> <a href="{% url "PyTweetApp.views.followerlist" user_profil.username %}">abonné{{ followers|pluralize }}</a><br/>
 
-				<span class="badge">{{ followed }}</span> <a href="{% url "PyTweetApp.views.followedlist" user.username %}">abonnement{{ followed|pluralize }}</a><br/>
+				<span class="badge">{{ followed }}</span> <a href="{% url "PyTweetApp.views.followedlist" user_profil.username %}">abonnement{{ followed|pluralize }}</a><br/>
 
 				<span class="badge">{{ nbrtweets }}</span> Tweet{{ nbrtweets|pluralize }}<br/>
 		  	</div>
