@@ -22,6 +22,7 @@ class Tweet(models.Model):
 class Member(models.Model):
     user = models.OneToOneField(User)
     retweets = models.ManyToManyField(Tweet, null=True, related_name='retweets')
+    followers = models.ManyToManyField(User, null=True, related_name='followers')
     followed = models.ManyToManyField(User, null=True, related_name='followed')
 
     def __unicode__(self):

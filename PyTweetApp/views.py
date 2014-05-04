@@ -86,7 +86,10 @@ def tweetline(request):
 		form = NewTweetForm()
 
 	user_profil = User.objects.get(username=request.user.username)
-	tweets = Tweet.objects.filter(Q(mentions=user_profil) | Q(author=user_profil) | Q(author__in=request.user.member.followed.all())).order_by('-date')
+
+	tweets = Tweet.objects.filter(Q(mentions=request.user) | # si l'utilisateur est mentionné dans le tweet
+								  Q(author=user_profil) | # si l'utilisateur est l'auteur du tweet
+								  Q(author__in=request.user.member.followed.all())).order_by('-date') # si l'auteur est suivi par l'utilisateur
 
 	return render(request, 'tweet-line.html', locals())
 
@@ -99,9 +102,26 @@ def profil(request, username):
 
 	tweets = Tweet.objects.filter(author=user_profil).order_by('-date')
 
+	followers = user_profil.member.followers.count()
+	followed = user_profil.member.followed.count()
+
+	nbrtweets = Tweet.objects.filter(author=user_profil).count()
+
 	return render(request, 'profil.html', locals())
 
+def followerlist(request, username):
 
+	user_profil = User.objects.get(username=username)
+	followers = user_profil.member.followers.all()
+
+	return render(request, 'follower-list.html', locals())
+
+def followedlist(request, username):
+
+	user_profil = User.objects.get(username=username)
+	followed = user_profil.member.followed.all()
+
+	return render(request, 'followed-list.html', locals())
 
 def hashtaglist(request):
 
@@ -130,6 +150,8 @@ def retweet(request, idtweet):
 def follow(request, username):
 
 	user_to_follow = User.objects.get(username=username)
+	user_to_follow.member.followers.add(request.user)
+	user_to_follow.member.save()
 	request.user.member.followed.add(user_to_follow)
 	request.user.member.save()
 
@@ -137,8 +159,10 @@ def follow(request, username):
 
 def unfollow(request, username):
 
-	user_to_follow = User.objects.get(username=username)
-	request.user.member.followed.remove(user_to_follow)
+	user_to_unfollow = User.objects.get(username=username)
+	user_to_unfollow.member.followers.remove(request.user)
+	user_to_unfollow.member.save()
+	request.user.member.followed.remove(user_to_unfollow)
 	request.user.member.save()
 
 	return redirect(tweetline)
@@ -156,8 +180,11 @@ def signup(request):
 			username = form.cleaned_data["username"]
 
 			newUser = User.objects.create_user(username, email, password)
-			newUser.first_name, newUser.last_name = firstname, lastname
+			newUser.first_name = firstname
+			newUser.last_name = lastname
 
+			newUser.save()
+			
 			member = Member(user=newUser)
 
 			member.save()

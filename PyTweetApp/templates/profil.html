@@ -15,13 +15,26 @@
 		      	<img class="img-rounded" src="{% static 'avatar/0.png' %}" alt="avatar">
 		  	</div>
 		  	<div class="col-md-7">
-		    	<h4>{{ user_profil.first_name }} {{ user_profil.last_name }}</h4>
-		    	<a href="{% url "PyTweetApp.views.profil" user.username %}">@{{ user_profil.username }}</a><br/><br/>
-		    	{% if user_profil.username != request.user.username %}
-		    	<button type="button" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-user"></span> S'abonner</button>
-		    	{% endif %}
+				<h4>{{ user_profil.first_name }} {{ user_profil.last_name }}</h4>
+		    	<a href="{% url "PyTweetApp.views.profil" user.username %}">@{{ user_profil.username }}</a><br/>
+
+		    	<hr/>
+
+				<span class="badge">{{ followers }}</span> <a href="{% url "PyTweetApp.views.followerlist" user.username %}">abonné{{ followers|pluralize }}</a><br/>
+
+				<span class="badge">{{ followed }}</span> <a href="{% url "PyTweetApp.views.followedlist" user.username %}">abonnement{{ followed|pluralize }}</a><br/>
+
+				<span class="badge">{{ nbrtweets }}</span> Tweet{{ nbrtweets|pluralize }}<br/>
 		  	</div>
 		</div>
+		{% if user_profil.username != request.user.username %}
+	    	<hr/>
+		    	{% if user_profil in request.user.member.followed.all %}
+					<a class="btn btn-sm btn-warning" href="{% url "PyTweetApp.views.unfollow" user_profil.username %}"><span class="glyphicon glyphicon-user"></span> Se désabonner de @{{ user_profil.username }}</a>
+				{% else %}
+					<a class="btn btn-sm btn-primary" href="{% url "PyTweetApp.views.follow" user_profil.username %}"><span class="glyphicon glyphicon-user"></span> Suivre @{{ user_profil.username }}</a>
+				{% endif %}
+	    	{% endif %}
 	</div>
 </div>
 

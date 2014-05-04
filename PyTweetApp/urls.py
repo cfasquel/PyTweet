@@ -13,6 +13,8 @@ urlpatterns = patterns('PyTweetApp.views',
 	url(r'^Retweet/(?P<idtweet>.+)$', 'retweet', name="retweet"),
 	url(r'^Follow/(?P<username>.+)$', 'follow', name="follow"),
 	url(r'^Unfollow/(?P<username>.+)$', 'unfollow', name="unfollow"),
+	url(r'^(?P<username>.+)/Followers$', 'followerlist', name="followers"),
+	url(r'^(?P<username>.+)/Followed$', 'followedlist', name="followed"),
 	url(r'^(?P<username>.+)$', 'profil'),
 	url(r'^$', 'home', name="home"),
 )
