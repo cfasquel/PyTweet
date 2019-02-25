@@ -1,7 +1,7 @@
 PyTweet
 =======
 
-Schoolar project - Light Twitter web application using Django.
+Student project - Light Twitter web application using Django.
 
 Trello
 --
